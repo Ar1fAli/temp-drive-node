@@ -27,19 +27,25 @@ async function main() {
 
     try {
         console.log("Connecting to Telegram...");
-        await client.start({
-            phoneNumber: async () => await input.text("Please enter your phone number: "),
-            password: async () => await input.text("Please enter your password (if any): "),
-            phoneCode: async () => await input.text("Please enter the code you received: "),
-            onError: (err) => console.log(err.message),
-        });
+        // The client will automatically use the session string to connect without asking for login details
+        await client.connect();
+
+        // You only need to run the start() function once to generate the session file.
+        // We will check if we are connected. If not, we start the login process.
+        if (!await client.isAuthenticated()) {
+            await client.start({
+                phoneNumber: async () => await input.text("Please enter your phone number: "),
+                password: async () => await input.text("Please enter your password (if any): "),
+                phoneCode: async () => await input.text("Please enter the code you received: "),
+                onError: (err) => console.log(err.message),
+            });
+            // Save the new session string after a successful manual login
+            const newSessionString = client.session.save();
+            fs.writeFileSync(SESSION_FILE_PATH, newSessionString);
+            console.log(`Session saved to '${SESSION_FILE_PATH}'. Future runs will be automatic.`);
+        }
 
         console.log("Successfully connected to Telegram.");
-
-        // Save the new session string to the file for all future runs
-        const newSessionString = client.session.save();
-        fs.writeFileSync(SESSION_FILE_PATH, newSessionString);
-        console.log(`Session saved to '${SESSION_FILE_PATH}'. Future runs will be automatic.`);
 
         console.log(`\nUploading file from URL: ${fileUrlToUpload}`);
         console.log("This may take some time depending on the file size...");
@@ -49,6 +55,7 @@ async function main() {
             file: fileUrlToUpload,
             caption: `File uploaded via Node.js at ${new Date().toLocaleString()}`,
             workers: 1, // Use a single worker for URL downloads to be safe
+            forceDocument: true, // <-- This is the crucial fix
         });
 
         console.log("\nFile uploaded successfully to your Saved Messages!");
@@ -67,7 +74,7 @@ async function main() {
 // Check if credentials are provided before running
 if (!apiId || !apiHash) {
     console.error("ERROR: API_ID and API_HASH environment variables must be set before running.");
-    console.error("Example: export API_ID=1234567 && export API_HASH='your_hash'");
+    console.error("Example: export API_ID=1234567 && export API_ID='your_hash'");
     process.exit(1);
 }
 
