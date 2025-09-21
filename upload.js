@@ -8,8 +8,8 @@ const path = require("path");
 const SESSION_FILE_PATH = "./string.session";
 const TEMP_DIR = "./temp"; // A directory to store files temporarily
 
-// The URL of the file you want to upload.
-const fileUrlToUpload = "https://www.thinkbroadband.com/download/100MB.zip";
+// A NEW, RELIABLE URL FOR A LARGE FILE FROM A PUBLIC, NON-RESTRICTIVE SERVER
+const fileUrlToUpload = "https://www.nasa.gov/wp-content/uploads/2023/11/iss-20th-anniversary-ebook-v2.pdf"; // 177 MB PDF from NASA
 
 // Read your secret credentials from environment variables.
 const apiId = Number(process.env.API_ID);
@@ -60,7 +60,7 @@ async function main() {
             url: fileUrlToUpload,
             method: 'GET',
             responseType: 'stream',
-            headers: { // <-- This is the crucial fix
+            headers: { 
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
             }
         });
