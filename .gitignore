@@ -1,0 +1,8 @@
+# Dependencies folder
+/node_modules
+
+# Session file containing secrets
+/string.session
+
+# Log files
+*.log

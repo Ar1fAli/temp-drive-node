@@ -1,0 +1,15 @@
+{
+  "name": "telegram-uploader-nodejs",
+  "version": "1.0.0",
+  "description": "A Node.js script to upload files to Telegram using the Core API (GramJS).",
+  "main": "upload.js",
+  "scripts": {
+    "start": "node upload.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gramjs": "^2.19.7",
+    "input": "^1.0.1"
+  }
+}
