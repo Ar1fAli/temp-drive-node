@@ -9,7 +9,7 @@ const SESSION_FILE_PATH = "./string.session";
 const TEMP_DIR = "./temp"; // A directory to store files temporarily
 
 // The URL of the file you want to upload.
-const fileUrlToUpload = "https://download.blender.org/peach/bigbuckbunny_movies/big_buck_bunny_1080p_surround.avi"; // 150 MB test video
+const fileUrlToUpload = "https://iso.artixlinux.org/testing-iso/artix-i3-openrc-20200704-x86_64.iso"; // 150 MB test video
 
 // Read your secret credentials from environment variables.
 const apiId = Number(process.env.API_ID);
