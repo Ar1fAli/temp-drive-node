@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "gramjs": "^2.19.7",
+    "telegram": "^2.19.7",
     "input": "^1.0.1"
   }
 }
