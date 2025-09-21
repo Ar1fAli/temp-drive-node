@@ -1,5 +1,4 @@
-const { TelegramClient } = require("telegram");
-const { StringSession } = require("telegram");
+const { TelegramClient, sessions } = require("telegram");
 const input = require("input");
 const fs = require("fs");
 
@@ -22,7 +21,7 @@ async function main() {
         sessionString = fs.readFileSync(SESSION_FILE_PATH, "utf8");
     }
 
-    const client = new TelegramClient(new StringSession(sessionString), apiId, apiHash, {
+    const client = new TelegramClient(new sessions.StringSession(sessionString), apiId, apiHash, {
         connectionRetries: 5,
     });
 
@@ -74,3 +73,4 @@ if (!apiId || !apiHash) {
 
 // Run the main application function
 main();
+
