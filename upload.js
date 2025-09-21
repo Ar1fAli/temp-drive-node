@@ -4,7 +4,9 @@ const fs = require("fs");
 
 // --- CONFIGURATION ---
 const SESSION_FILE_PATH = "./string.session";
-const fileUrlToUpload = "https://archive.org/download/26-Design-Review-Pres-Vol-1-1972/26-Design-Review-Pres-Vol-1-1972.pdf"; // The 45.4 MB file that previously failed with the Bot API.
+
+// A NEW, RELIABLE URL FOR A LARGE FILE
+const fileUrlToUpload = "https://www.thinkbroadband.com/download/100MB.zip"; // 100 MB test file
 
 // Read your secret credentials from environment variables.
 const apiId = Number(process.env.API_ID);
@@ -24,9 +26,7 @@ async function main() {
 
     try {
         console.log("Connecting to Telegram...");
-
-        // The start function handles everything: connecting, and logging in if needed.
-        // Since your session file exists, it will log in automatically without prompts.
+        
         await client.start({
             phoneNumber: async () => await input.text("Please enter your phone number: "),
             password: async () => await input.text("Please enter your password (if any): "),
@@ -36,7 +36,6 @@ async function main() {
 
         console.log("Successfully connected to Telegram.");
 
-        // We only need to save the session if it's new (i.e., the file didn't exist before)
         if (!sessionString) {
             const newSessionString = client.session.save();
             fs.writeFileSync(SESSION_FILE_PATH, newSessionString);
@@ -50,7 +49,7 @@ async function main() {
             file: fileUrlToUpload,
             caption: `File uploaded via Node.js at ${new Date().toLocaleString()}`,
             workers: 1,
-            forceDocument: true, 
+            forceDocument: true, // This flag is confirmed to be here.
         });
 
         console.log("\nFile uploaded successfully to your Saved Messages!");
