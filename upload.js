@@ -59,7 +59,10 @@ async function main() {
         const response = await axios({
             url: fileUrlToUpload,
             method: 'GET',
-            responseType: 'stream'
+            responseType: 'stream',
+            headers: { // <-- This is the crucial fix
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+            }
         });
 
         response.data.pipe(writer);
@@ -76,7 +79,7 @@ async function main() {
         console.log("This may take some time depending on the file size...");
 
         const uploadedFile = await client.sendFile("me", {
-            file: tempFilePath, // <-- We now use the local file path
+            file: tempFilePath,
             caption: `File uploaded via Node.js at ${new Date().toLocaleString()}`,
             forceDocument: true,
         });
@@ -107,4 +110,3 @@ if (!apiId || !apiHash) {
 
 // Run the main application function
 main();
-
