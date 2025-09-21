@@ -8,12 +8,22 @@ const path = require("path");
 const SESSION_FILE_PATH = "./string.session";
 const TEMP_DIR = "./temp"; // A directory to store files temporarily
 
-// A NEW, RELIABLE URL FOR A LARGE FILE FROM A PUBLIC, NON-RESTRICTIVE SERVER
-const fileUrlToUpload = "https://www.nasa.gov/wp-content/uploads/2023/11/iss-20th-anniversary-ebook-v2.pdf"; // 177 MB PDF from NASA
+// The URL of the file you want to upload.
+const fileUrlToUpload = "https://download.blender.org/peach/bigbuckbunny_movies/big_buck_bunny_1080p_surround.avi"; // 150 MB test video
 
 // Read your secret credentials from environment variables.
 const apiId = Number(process.env.API_ID);
 const apiHash = process.env.API_HASH;
+
+// Helper function to format file size for display
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
 
 // Main function to run the application
 async function main() {
@@ -71,7 +81,17 @@ async function main() {
             writer.on('finish', resolve);
             writer.on('error', reject);
         });
-        console.log(`File downloaded successfully to: ${tempFilePath}`);
+        console.log(`File downloaded successfully.`);
+        
+        // --- CHECKPOINT FEATURE ---
+        const stats = fs.statSync(tempFilePath);
+        const fileSizeFormatted = formatBytes(stats.size);
+        console.log(`\n--- CHECKPOINT ---`);
+        console.log(`File: ${fileName}`);
+        console.log(`Size: ${fileSizeFormatted}`);
+        console.log(`Path: ${tempFilePath}`);
+        await input.text("==> Press ENTER to continue with the upload to Telegram...");
+        // --- END OF CHECKPOINT ---
 
 
         // --- STEP 2: UPLOAD THE LOCAL FILE TO TELEGRAM ---
